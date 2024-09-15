@@ -1,0 +1,123 @@
+1-doctor:
+
+----->>organize and show up his schedule
+->organize:
+
+1-insert:
+
+INSERT INTO doctor_shift                               ////input::all attributes of doctor_shift table                        mzbot
+VALUES (doc_id,day,start_end)                                                      
+
+2-update:
+
+UPDATE doctor_shift                                             ////input: doc_id and day and   the updated day                                   mzbot
+SET day=new_day                                                                                         
+WHERE doc_id=id and day=current_day                                              
+or 
+
+UPDATE doctor_shift                                                                                  /////input:: doc_id and day    and the updated value of shift                           mzbot
+SET start_end_shift=new_start_end
+WHERE doc_id=id and day=current_day
+
+3-delete:
+
+DELETE FROM doctor_shift                                                                           /////input:doc_id and day                                               mzbot
+WHERE doc_id=id and day=current_day
+
+
+->show up his schedule 
+
+SELECT COUNT(*) as "number of patients  today "                //3ddhom bs       ///input:doc_id , datte (Today)             na2sss time          mzbot 
+FROM patient_appointment
+WHERE doctor_id =id  AND datte=d 
+
+SELECT id,first_name,middle_name,last_name,age,gender,time       //time hena r2i n5lih varchar 34an nktp am or pm     //input:doc_id (d) , datte (Today)     mzbot
+FROM patient,patient_appointment
+WHERE doctor_id= d  AND  patient_id=id
+
+SELECT patient_report,datte,patient_id                                        ////nrg3 kol reports al marid dah mn sa3t ma gih yk4f 3ndo 34an ytb3 7alto       ////input: doc_id and patient_id   mzbot
+FROM  patient_appointment
+WHERE doctor_id=d_id and patient_id=p_id
+
+                                                                            *****************************************************************
+---->>view his monthly report and his raise
+
+-->view his montlhly report
+
+SELECT evaluation ,datte                    ///input : doc_id    mzbot
+FROM doctor_evaluation
+WHERE doctor_id =id and datte IN (SELECT MAX(datte)
+                                                                  FROM doctor_evaluation
+                                                                  WHERE doctor_id =id )
+
+
+-->proof his attendence:
+
+
+INSERT doctor_attendence                                /////input : doc_id  and( 1 )for attendence and date (Today)                mzbot
+VALUES(doc_id,attendence(1),date)
+
+
+--->>raises
+
+SELECT salary               /// mzbot
+FROM doctor
+WHERE id=d_id
+
+SELECT  COUNT(*) As  "no of permissions in this month"                              /////input : the month and year which is ended and doc_id             mzbot
+FROM doctor_permissions
+WHERE  year=DATEPART(yyyy,datte) AND 
+DATEPART(mm,datte)=month       AND doctor_id=id                                                                                                                     
+
+
+SELECT  SUM(extrahours) As  "no of extra hours in this month"                                   /////input : the month and year which is ended and doc_id                mzbot
+FROM   doctor_ovetime
+WHERE  year= DATEPART(yyyy,datte) AND month =DATEPART(mm,datte)  AND doctor_id=id
+
+
+SELECT COUNT(*) As "the no of days which he should work in one week"                     ////input :doc_id      ( to get the no of days should work in one week)       mzbot
+FROM doctor_shift
+WHERE doc_id =id
+
+
+SELECT COUNT(*) As  "no of attendence in this month"                                                                              ///input : doc_id and year and moth that ended       mzbot
+FROM   doctor_attendence
+WHERE  year= DATEPART(yyyy,datte) AND  month=DATEPART(mm,datte)   AND doctor_id=id
+
+
+                                                                                                   *********************************
+--->> reserve overtime
+
+INSERT INTO doctor_overtime                                /////input: doc_id,extra hours,date                    mzbot
+VALUES(doc_id,extra_hours,date)
+
+                                                                                 *****************************************
+--->>set complains
+
+INSERT INTO complaint_doc_nurse                                              ////input all attributes of this table                mzbot
+VALUES (d_id,n_id,date,doc_complains)
+
+                                                                                    ***************************************
+--->>write patient report
+
+1-update in the row as the receptionist insert it 
+
+UPDATE patient_appointment                                                                                       /////input:doc_id ,patient_id,date_today , report      mzbot
+SET patient_report=report
+WHERE doc_id=d_id AND patient_id=p_id AND datte=today
+
+                                                   **************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
