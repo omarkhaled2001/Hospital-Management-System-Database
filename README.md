@@ -103,7 +103,7 @@ This project focuses on building a **Hospital Management System Database** that 
 1. **Clone the Repository**:
 
    ```bash
-   git clone <repository_url>
+   git clone https://github.com/omarkhaled2001/Hospital-Management-System-Database.git
    ```
 
 2. **Database Setup**:
